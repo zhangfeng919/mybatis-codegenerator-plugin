@@ -132,6 +132,8 @@ public class CustomizePlugin extends PluginAdapter {
 
         results.addAll(getFiles(new DTOJavaGenerator(),introspectedTable));
 
+        results.addAll(getFiles(new ApiJavaGenerator(),introspectedTable));
+
 
         return results;
     }

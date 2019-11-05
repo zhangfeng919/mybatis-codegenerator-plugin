@@ -3,8 +3,11 @@ package ocm.zhangfeng.mybatis;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
+import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.Method;
+import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.config.Context;
+import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 /**
  * @author zhangfeng
@@ -13,6 +16,8 @@ import org.mybatis.generator.config.Context;
 public class JavaGeneratorUtils {
 
     public final static String SERVICE = "Service";
+    public final static String API = "Api";
+    public final static String SERVICEIMPL = "ServiceImpl";
     public final static String QUERY = "Query";
     public final static String PAGEQUERY = "PageQuery";
     public final static String DTO = "DTO";
@@ -34,10 +39,16 @@ public class JavaGeneratorUtils {
     public static String buildServicePackagePath(IntrospectedTable introspectedTable) {
         String recordType = introspectedTable.getBaseRecordType();
         String recordPack = recordType.substring(0, recordType.lastIndexOf("."));
-        String pojoPack = recordType.substring(0, recordType.lastIndexOf("."));
-        return recordPack.substring(0, pojoPack.lastIndexOf(".")) + ".service";
+        String pojoPack = recordPack.substring(0, recordPack.lastIndexOf("."));
+        return pojoPack.substring(0, pojoPack.lastIndexOf(".")) + ".service";
     }
 
+    public static String buildApiPackagePath(IntrospectedTable introspectedTable) {
+        String recordType = introspectedTable.getBaseRecordType();
+        String recordPack = recordType.substring(0, recordType.lastIndexOf("."));
+        String pojoPack = recordPack.substring(0, recordPack.lastIndexOf("."));
+        return pojoPack.substring(0, pojoPack.lastIndexOf(".")) + ".apis";
+    }
     public static String getDTOPack(Context context, IntrospectedTable introspectedTable) {
         String dtoPack = context.getProperty("DTOPackage");
         if (dtoPack == null) {
@@ -56,9 +67,20 @@ public class JavaGeneratorUtils {
         return queryPack;
     }
 
+    public static FullyQualifiedJavaType getApiJavaType(Context context,
+        IntrospectedTable introspectedTable) {
+        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        String pack = getApiPack(context, introspectedTable);
+        return new FullyQualifiedJavaType(
+            new StringBuffer(pack).append(".").
+                append(objectName).
+                append(API).toString());
+
+    }
+
     public static FullyQualifiedJavaType getServiceJavaType(Context context,
-        IntrospectedTable introspectedTable,
-        String objectName) {
+        IntrospectedTable introspectedTable) {
+        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
         String pack = getServicePack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(pack).append(".").
@@ -66,10 +88,21 @@ public class JavaGeneratorUtils {
                 append(SERVICE).toString());
 
     }
+    public static FullyQualifiedJavaType getServiceImplJavaType(Context context,
+        IntrospectedTable introspectedTable) {
+        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        String pack = getServicePack(context, introspectedTable);
+        return new FullyQualifiedJavaType(
+            new StringBuffer(pack).append(".").
+                append("impl.").
+                append(objectName).
+                append(SERVICEIMPL).toString());
+
+    }
 
     public static FullyQualifiedJavaType getDTOJavaType(Context context,
-        IntrospectedTable introspectedTable,
-        String objectName) {
+        IntrospectedTable introspectedTable) {
+        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
         String pack = getDTOPack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(pack).append(".").
@@ -79,8 +112,8 @@ public class JavaGeneratorUtils {
     }
 
     public static FullyQualifiedJavaType getPageQueryJavaType(Context context,
-        IntrospectedTable introspectedTable,
-        String objectName) {
+        IntrospectedTable introspectedTable) {
+        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
         String queryPack = getQueryPack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(queryPack).append(".").
@@ -90,14 +123,23 @@ public class JavaGeneratorUtils {
     }
 
     public static FullyQualifiedJavaType getQueryJavaType(Context context,
-        IntrospectedTable introspectedTable,
-        String objectName) {
+        IntrospectedTable introspectedTable) {
+        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
         String queryPack = getQueryPack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(queryPack).append(".").
                 append(objectName).
                 append(QUERY).toString());
 
+    }
+
+    public static String getApiPack(Context context, IntrospectedTable introspectedTable) {
+        String pack = context.getProperty("apiPackage");
+        if (pack == null) {
+            pack = buildApiPackagePath(introspectedTable);
+        }
+
+        return pack;
     }
 
     public static String getServicePack(Context context, IntrospectedTable introspectedTable) {
@@ -193,5 +235,42 @@ public class JavaGeneratorUtils {
         field.addJavaDocLine(sb.toString());
         field.addJavaDocLine(" */");
         // 生成注释结束
+    }
+
+    public static String firstCharLower(String str){
+        if(str == null){
+            return  null;
+        }
+        if(str.length() == 1){
+            return  str.toUpperCase();
+        }
+        return new StringBuilder().append(str.substring(0,1).toLowerCase()).
+            append(str.substring(1)).toString();
+    }
+
+
+    public static Method createGetterMethod(Field field){
+        Method method = new Method();
+        method.setReturnType(field.getType());
+        method.setName(JavaBeansUtil.getGetterMethodName(field.getName(),field.getType()));
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.addBodyLine(new StringBuilder().
+            append(" return ").append(field.getName()).append(";").toString());
+
+        return method;
+    }
+    public static Method createSetterMethod(Field field){
+        Method method = new Method();
+        method.setName(JavaBeansUtil.getSetterMethodName(field.getName()));
+        method.setVisibility(JavaVisibility.PUBLIC);
+
+        Parameter parameter = new Parameter(field.getType(),field.getName());
+        method.addParameter(parameter);
+
+        method.addBodyLine(new StringBuilder().
+            append(" this.").append(field.getName()).append(" = ").
+            append(field.getName()).append(";").toString());
+
+        return method;
     }
 }

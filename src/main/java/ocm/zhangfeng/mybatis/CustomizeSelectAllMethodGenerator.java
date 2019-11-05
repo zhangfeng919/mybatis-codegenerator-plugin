@@ -20,7 +20,7 @@ public class CustomizeSelectAllMethodGenerator extends SelectAllMethodGenerator 
         String queryPack = JavaGeneratorUtils.getQueryPack(context,introspectedTable);
         String objectName = introspectedTable.getFullyQualifiedTable().getDomainObjectName();
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(queryPack+"."+objectName+"Query");
-        Parameter parameter = new Parameter(type, JavaBeansUtil.getCamelCaseString(objectName,false) +"Query");
+        Parameter parameter = new Parameter(type, JavaGeneratorUtils.firstCharLower(objectName) +"Query");
 
         method.addParameter(parameter);
         interfaze.addImportedType(type);

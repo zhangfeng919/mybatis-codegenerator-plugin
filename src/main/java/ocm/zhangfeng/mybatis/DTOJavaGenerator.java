@@ -42,6 +42,18 @@ public class DTOJavaGenerator extends AbstractJavaGenerator {
         queryClassPage.addImportedType(new FullyQualifiedJavaType("java.io.Serializable"));
         queryClassPage.addSuperInterface(new FullyQualifiedJavaType("java.io.Serializable"));
 
+        introspectedTable.getAllColumns().forEach(introspectedColumn -> {
+            introspectedColumn.getJavaProperty();
+            Field field = new Field();
+            field.setType(introspectedColumn.getFullyQualifiedJavaType());
+            field.setName(introspectedColumn.getJavaProperty());
+            field.setVisibility(JavaVisibility.PRIVATE);
+
+            queryClassPage.addField(field);
+            queryClassPage.addMethod(JavaGeneratorUtils.createGetterMethod(field));
+            queryClassPage.addMethod(JavaGeneratorUtils.createSetterMethod(field));
+        });
+
         return queryClassPage;
     }
 
