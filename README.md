@@ -4,6 +4,7 @@
 定制版 mybatis generator
 增加service DTO query 
 
+
 #### 软件架构
 软件架构说明
 
@@ -16,8 +17,15 @@
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
+1.  在mybatis-generator-maven-plugin中依赖本项目 jar
+2.  generatorConfig.xml中context节点targetRuntime修改为ocm.zhangfeng.mybatis.CustomizeIntrospectedTable，
+context节点下增加plugin 节点 ocm.zhangfeng.mybatis.CustomizePlugin
+<context id="my" targetRuntime="ocm.zhangfeng.mybatis.CustomizeIntrospectedTable">
+     <property name="javaFileEncoding" value="utf-8"/>
+    <property name="beginningDelimiter" value=""/>
+    <property name="endingDelimiter" value=""/>
+    <plugin type="ocm.zhangfeng.mybatis.CustomizePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
 3.  xxxx
 
 #### 参与贡献

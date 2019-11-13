@@ -1,9 +1,8 @@
 package utils;
 
 import com.alibaba.fastjson.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author zhangfeng
@@ -11,7 +10,7 @@ import org.slf4j.event.Level;
  **/
 public class LogUtil {
 
-    private static Logger log = LoggerFactory.getLogger(LogUtil.class);
+    private static Logger log = Logger.getLogger(LogUtil.class.getName());
 
 
     public static void info(Object msg) {
@@ -19,19 +18,19 @@ public class LogUtil {
     }
 
     public static void trace(Object msg) {
-        log(msg, Level.TRACE);
+        log(msg, Level.INFO);
     }
 
     public static void debug(Object msg) {
-        log(msg, Level.DEBUG);
+        log(msg, Level.INFO);
     }
 
     public static void warn(Object msg) {
-        log(msg, Level.WARN);
+        log(msg, Level.WARNING);
     }
 
     public static void error(Object msg) {
-        log(msg, Level.ERROR);
+        log(msg, Level.INFO);
     }
 
     private static void log(Object msg, Level level) {
@@ -42,25 +41,7 @@ public class LogUtil {
             stackTraceElement.getMethodName(),
             stackTraceElement.getLineNumber(),
             JSONObject.toJSONString(msg));
-        switch (level) {
-            case TRACE:
-                log.trace(printStr);
-                break;
-            case DEBUG:
-                log.debug(printStr);
-                break;
-            case INFO:
-                log.info(printStr);
-                break;
-            case WARN:
-                log.warn(printStr);
-                break;
-            case ERROR:
-                log.error(printStr);
-                break;
-            default:
-                log.info(printStr);
-        }
+        log.info(printStr);
     }
 
 }

@@ -17,10 +17,10 @@ public class CustomizeSelectAllMethodGenerator extends SelectAllMethodGenerator 
 
     @Override
     public void addMapperAnnotations(Interface interfaze, Method method) {
-        String queryPack = JavaGeneratorUtils.getQueryPack(context,introspectedTable);
+        String queryPack = JavaGeneratorUtils.getDTOPack(context,introspectedTable);
         String objectName = introspectedTable.getFullyQualifiedTable().getDomainObjectName();
-        FullyQualifiedJavaType type = new FullyQualifiedJavaType(queryPack+"."+objectName+"Query");
-        Parameter parameter = new Parameter(type, JavaGeneratorUtils.firstCharLower(objectName) +"Query");
+        FullyQualifiedJavaType type = new FullyQualifiedJavaType(queryPack+"."+objectName+JavaGeneratorUtils.DTO);
+        Parameter parameter = new Parameter(type, JavaGeneratorUtils.firstCharLower(objectName) +JavaGeneratorUtils.DTO);
 
         method.addParameter(parameter);
         interfaze.addImportedType(type);

@@ -6,6 +6,10 @@ import static ocm.zhangfeng.mybatis.JavaGeneratorUtils.methodAnnotation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import ocm.zhangfeng.mybatis.javagenerator.ApiJavaGenerator;
+import ocm.zhangfeng.mybatis.javagenerator.DTOJavaGenerator;
+import ocm.zhangfeng.mybatis.javagenerator.QueryJavaGenerator;
+import ocm.zhangfeng.mybatis.javagenerator.ServiceJavaGenerator;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -126,7 +130,7 @@ public class CustomizePlugin extends PluginAdapter {
         IntrospectedTable introspectedTable) {
         List<GeneratedJavaFile> results = new ArrayList<>();
 
-        results.addAll(getFiles(new QueryJavaGenerator(),introspectedTable));
+        //results.addAll(getFiles(new QueryJavaGenerator(),introspectedTable));
 
         results.addAll(getFiles(new ServiceJavaGenerator(),introspectedTable));
 

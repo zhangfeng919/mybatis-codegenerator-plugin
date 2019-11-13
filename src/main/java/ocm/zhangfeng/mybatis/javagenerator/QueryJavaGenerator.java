@@ -1,7 +1,8 @@
-package ocm.zhangfeng.mybatis;
+package ocm.zhangfeng.mybatis.javagenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import ocm.zhangfeng.mybatis.JavaGeneratorUtils;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;

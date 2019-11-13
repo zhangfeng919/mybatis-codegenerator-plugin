@@ -24,6 +24,9 @@ public class JavaGeneratorUtils {
     public final static String APIRESULTDTO = "APIResultDTO";
     public final static String APILISTDTO = "ApiListDTO";
 
+    public final static String PAGEDTOTYPE = "com.zhangfeng.utils.base.POJO.DTO.PageDTO";
+
+
     public static String buildPackagePath(IntrospectedTable introspectedTable) {
         String recordType = introspectedTable.getBaseRecordType();
         String recordPack = recordType.substring(0, recordType.lastIndexOf("."));

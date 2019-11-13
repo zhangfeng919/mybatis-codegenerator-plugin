@@ -1,8 +1,11 @@
-package ocm.zhangfeng.mybatis;
+package ocm.zhangfeng.mybatis.javagenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import ocm.zhangfeng.mybatis.JavaGeneratorUtils;
+import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.Plugin.ModelClassType;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -11,6 +14,7 @@ import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
+import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 /**
  * @author zhangfeng
@@ -36,8 +40,6 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     TopLevelClass createApiClass() {
         String objectName = introspectedTable.getFullyQualifiedTable().getDomainObjectName();
 
-        FullyQualifiedJavaType queryType = JavaGeneratorUtils
-            .getQueryJavaType(context, introspectedTable);
         FullyQualifiedJavaType dtoType = JavaGeneratorUtils
             .getDTOJavaType(context, introspectedTable);
         FullyQualifiedJavaType serviceInterfaceType = JavaGeneratorUtils
@@ -53,7 +55,6 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
         FullyQualifiedJavaType apiListType = JavaGeneratorUtils
             .getApiListJavaType(context, introspectedTable);
 
-        api.addImportedType(queryType);
         api.addImportedType(dtoType);
         api.addImportedType(returnType);
         api.addImportedType(apiListType);
@@ -73,11 +74,11 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
 
         addService(api, introspectedTable);
 
-        addSelectById(api, queryType, dtoType);
+        addSelectById(api, dtoType);
 
-        deleteById(api, queryType, dtoType);
+        deleteById(api, dtoType);
 
-        selectByParam(api, objectName, queryType, dtoType);
+        selectByParam(api, objectName, dtoType);
 
         addObject(api, objectName, objectType, dtoType);
 
@@ -100,7 +101,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     }
 
     void addSelectById(TopLevelClass service,
-        FullyQualifiedJavaType queryType, FullyQualifiedJavaType dtoType) {
+         FullyQualifiedJavaType dtoType) {
         Method method = new Method();
         method.setName(METHODSELECTBYID);
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -116,13 +117,14 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
             .getApiResultJavaType(context, introspectedTable, dtoType);
         method.setReturnType(returnType);
 
-        String queryName = queryType.getShortName();
+        String queryName = dtoType.getShortName();
         String serviceName = JavaGeneratorUtils.firstCharLower(
             JavaGeneratorUtils.getServiceJavaType(context,introspectedTable)
                 .getShortName());
 
         method.addBodyLine(String.format("%s selectByKeyQuery = new %s();",queryName,queryName));
-        method.addBodyLine("selectByKeyQuery.setId(id);");
+
+        method.addBodyLine(String.format("selectByKeyQuery.%s(id);",setPrimaryKeyMethodName()));
         method.addBodyLine(String.format("return %s.selectById(selectByKeyQuery);",serviceName));
 
         JavaGeneratorUtils.methodAnnotation(method, "根据主键获取信息");
@@ -130,8 +132,13 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
         service.addMethod(method);
     }
 
+    String setPrimaryKeyMethodName(){
+        Method setMethod = JavaBeansUtil.getJavaBeansSetter(introspectedTable.getPrimaryKeyColumns().get(0), this.context, this.introspectedTable);
+        return setMethod.getName();
+    }
+
     void deleteById(TopLevelClass service,
-        FullyQualifiedJavaType queryType, FullyQualifiedJavaType dtoType) {
+        FullyQualifiedJavaType dtoType) {
         Method method = new Method();
         method.setName(METHODDELETEBYID);
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -147,13 +154,13 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
             .getApiResultJavaType(context, introspectedTable, dtoType);
         method.setReturnType(returnType);
 
-        String queryName = queryType.getShortName();
+        String queryName = dtoType.getShortName();
         String serviceName = JavaGeneratorUtils.firstCharLower(
             JavaGeneratorUtils.getServiceJavaType(context,introspectedTable)
                 .getShortName());
 
         method.addBodyLine(String.format("%s sysDicTypeDeleteQuery = new %s();",queryName,queryName));
-        method.addBodyLine("sysDicTypeDeleteQuery.setId(id);");
+        method.addBodyLine(String.format("sysDicTypeDeleteQuery.%s(id);",setPrimaryKeyMethodName()));
         method.addBodyLine(String.format("return %s.deleteById(sysDicTypeDeleteQuery);",serviceName));
 
         JavaGeneratorUtils.methodAnnotation(method, "根据主键删除信息");
@@ -163,7 +170,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
 
 
     void selectByParam(TopLevelClass service, String objectName,
-        FullyQualifiedJavaType queryType, FullyQualifiedJavaType dtoType) {
+         FullyQualifiedJavaType dtoType) {
         Method method = new Method();
         method.setName(METHODSELECTBYPARAM);
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -171,20 +178,25 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
         method.addAnnotation("@GetMapping(\"/list\")");
 
         String parameterName =
-            JavaGeneratorUtils.firstCharLower(objectName) + JavaGeneratorUtils.QUERY;
-        Parameter parameter = new Parameter(queryType, parameterName);
+            JavaGeneratorUtils.firstCharLower(objectName) + JavaGeneratorUtils.DTO;
+        Parameter parameter = new Parameter(dtoType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType listType = JavaGeneratorUtils
-            .getApiListJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType page = new FullyQualifiedJavaType(JavaGeneratorUtils.PAGEDTOTYPE);
+        Parameter pageParam = new Parameter(page, JavaGeneratorUtils.firstCharLower(page.getShortName()));
+        method.addParameter(pageParam);
+        service.addImportedType(page);
+
+        FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
+        listType.addTypeArgument(dtoType);
         FullyQualifiedJavaType returnType = JavaGeneratorUtils
             .getApiResultJavaType(context, introspectedTable, listType);
         method.setReturnType(returnType);
 
-        String queryName = JavaGeneratorUtils.firstCharLower(queryType.getShortName());
+        String queryName = JavaGeneratorUtils.firstCharLower(dtoType.getShortName());
         String serviceName = JavaGeneratorUtils.firstCharLower(JavaGeneratorUtils.getServiceJavaType(context,introspectedTable).getShortName());
 
-        method.addBodyLine(String.format("return %s.selectByParam(%s);",serviceName, queryName));
+        method.addBodyLine(String.format("return %s.selectByParam(%s,%s);",serviceName, queryName,pageParam.getName()));
 
         JavaGeneratorUtils.methodAnnotation(method, "根据查询条件获取记录列表");
         service.addMethod(method);

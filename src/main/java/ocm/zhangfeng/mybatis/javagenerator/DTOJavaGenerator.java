@@ -1,7 +1,8 @@
-package ocm.zhangfeng.mybatis;
+package ocm.zhangfeng.mybatis.javagenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import ocm.zhangfeng.mybatis.JavaGeneratorUtils;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -41,8 +42,10 @@ public class DTOJavaGenerator extends AbstractJavaGenerator {
         queryClassPage.setVisibility(JavaVisibility.PUBLIC);
         queryClassPage.addImportedType(new FullyQualifiedJavaType("java.io.Serializable"));
         queryClassPage.addSuperInterface(new FullyQualifiedJavaType("java.io.Serializable"));
+        queryClassPage.setSuperClass(introspectedTable.getBaseRecordType());
+        queryClassPage.addImportedType(introspectedTable.getBaseRecordType());
 
-        introspectedTable.getAllColumns().forEach(introspectedColumn -> {
+        /*introspectedTable.getAllColumns().forEach(introspectedColumn -> {
             introspectedColumn.getJavaProperty();
             Field field = new Field();
             field.setType(introspectedColumn.getFullyQualifiedJavaType());
@@ -52,7 +55,7 @@ public class DTOJavaGenerator extends AbstractJavaGenerator {
             queryClassPage.addField(field);
             queryClassPage.addMethod(JavaGeneratorUtils.createGetterMethod(field));
             queryClassPage.addMethod(JavaGeneratorUtils.createSetterMethod(field));
-        });
+        });*/
 
         return queryClassPage;
     }
