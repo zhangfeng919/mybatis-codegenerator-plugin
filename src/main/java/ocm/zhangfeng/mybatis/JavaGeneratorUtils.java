@@ -72,7 +72,7 @@ public class JavaGeneratorUtils {
 
     public static FullyQualifiedJavaType getApiJavaType(Context context,
         IntrospectedTable introspectedTable) {
-        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        String objectName = getObjectName(introspectedTable);
         String pack = getApiPack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(pack).append(".").
@@ -83,7 +83,7 @@ public class JavaGeneratorUtils {
 
     public static FullyQualifiedJavaType getServiceJavaType(Context context,
         IntrospectedTable introspectedTable) {
-        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        String objectName = getObjectName(introspectedTable);
         String pack = getServicePack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(pack).append(".").
@@ -93,7 +93,7 @@ public class JavaGeneratorUtils {
     }
     public static FullyQualifiedJavaType getServiceImplJavaType(Context context,
         IntrospectedTable introspectedTable) {
-        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        String objectName = getObjectName(introspectedTable);
         String pack = getServicePack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(pack).append(".").
@@ -105,7 +105,7 @@ public class JavaGeneratorUtils {
 
     public static FullyQualifiedJavaType getDTOJavaType(Context context,
         IntrospectedTable introspectedTable) {
-        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        String objectName = getObjectName(introspectedTable);
         String pack = getDTOPack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(pack).append(".").
@@ -116,7 +116,7 @@ public class JavaGeneratorUtils {
 
     public static FullyQualifiedJavaType getPageQueryJavaType(Context context,
         IntrospectedTable introspectedTable) {
-        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        String objectName = getObjectName(introspectedTable);
         String queryPack = getQueryPack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(queryPack).append(".").
@@ -127,7 +127,7 @@ public class JavaGeneratorUtils {
 
     public static FullyQualifiedJavaType getQueryJavaType(Context context,
         IntrospectedTable introspectedTable) {
-        String objectName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        String objectName = getObjectName(introspectedTable);
         String queryPack = getQueryPack(context, introspectedTable);
         return new FullyQualifiedJavaType(
             new StringBuffer(queryPack).append(".").
@@ -275,5 +275,9 @@ public class JavaGeneratorUtils {
             append(field.getName()).append(";").toString());
 
         return method;
+    }
+
+    public static String getObjectName(IntrospectedTable introspectedTable){
+        return introspectedTable.getFullyQualifiedTable().getDomainObjectName();
     }
 }
