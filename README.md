@@ -20,14 +20,52 @@
 1.  在mybatis-generator-maven-plugin中依赖本项目 jar
 2.  generatorConfig.xml中context节点targetRuntime修改为ocm.zhangfeng.mybatis.CustomizeIntrospectedTable，
 context节点下增加plugin 节点 ocm.zhangfeng.mybatis.CustomizePlugin
+```
 <context id="my" targetRuntime="ocm.zhangfeng.mybatis.CustomizeIntrospectedTable">
      <property name="javaFileEncoding" value="utf-8"/>
     <property name="beginningDelimiter" value=""/>
     <property name="endingDelimiter" value=""/>
     <plugin type="ocm.zhangfeng.mybatis.CustomizePlugin"></plugin>
     <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
-3.  xxxx
+    ```
+3.  项目springboot依赖
+```
+<parent>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-parent</artifactId>
+  <version>2.1.9.RELEASE</version>
+  <relativePath/> <!-- lookup parent from repository -->
+</parent>
+<dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.62</version>
+    </dependency>
 
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper-spring-boot-starter</artifactId>
+      <version>1.2.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>mybatis-spring-boot-starter</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+  </dependencies>
+```
 #### 参与贡献
 
 1.  Fork 本仓库
