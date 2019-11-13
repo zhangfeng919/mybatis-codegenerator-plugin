@@ -49,14 +49,10 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
         JavaGeneratorUtils.getApiJavaType(context, introspectedTable));
     api.setVisibility(JavaVisibility.PUBLIC);
 
-    FullyQualifiedJavaType returnType = JavaGeneratorUtils
-        .getApiResultJavaType(context, introspectedTable);
-    FullyQualifiedJavaType apiListType = JavaGeneratorUtils
-        .getApiListJavaType(context, introspectedTable);
+    FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
 
     api.addImportedType(dtoType);
     api.addImportedType(returnType);
-    api.addImportedType(apiListType);
     api.addImportedType(objectType);
     api.addImportedType("org.springframework.beans.factory.annotation.Autowired;");
     api.addImportedType(serviceInterfaceType);
@@ -115,8 +111,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     parameter.addAnnotation("@PathVariable(\"id\") ");
     method.addParameter(parameter);
 
-    FullyQualifiedJavaType returnType = JavaGeneratorUtils
-        .getApiResultJavaType(context, introspectedTable, dtoType);
+    FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
     method.setReturnType(returnType);
 
     String queryName = dtoType.getShortName();
@@ -155,8 +150,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     parameter.addAnnotation("@PathVariable(\"id\") ");
     method.addParameter(parameter);
 
-    FullyQualifiedJavaType returnType = JavaGeneratorUtils
-        .getApiResultJavaType(context, introspectedTable, dtoType);
+    FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
     method.setReturnType(returnType);
 
     String queryName = dtoType.getShortName();
@@ -195,8 +189,8 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
 
     FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
     listType.addTypeArgument(dtoType);
-    FullyQualifiedJavaType returnType = JavaGeneratorUtils
-        .getApiResultJavaType(context, introspectedTable, listType);
+    FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
+    returnType.addTypeArgument(listType);
     method.setReturnType(returnType);
 
     String queryName = JavaGeneratorUtils.firstCharLower(dtoType.getShortName());
@@ -224,8 +218,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     parameter.addAnnotation("@RequestBody");
     method.addParameter(parameter);
 
-    FullyQualifiedJavaType returnType = JavaGeneratorUtils
-        .getApiResultJavaType(context, introspectedTable, dtoType);
+    FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
     method.setReturnType(returnType);
 
     String serviceName = JavaGeneratorUtils.firstCharLower(
@@ -251,8 +244,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     parameter.addAnnotation("@RequestBody");
     method.addParameter(parameter);
 
-    FullyQualifiedJavaType returnType = JavaGeneratorUtils
-        .getApiResultJavaType(context, introspectedTable, dtoType);
+    FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
     method.setReturnType(returnType);
 
     String serviceName = JavaGeneratorUtils.firstCharLower(

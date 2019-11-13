@@ -57,14 +57,10 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         TopLevelClass service = new TopLevelClass(serviceType);
         service.setVisibility(JavaVisibility.PUBLIC);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable);
-        FullyQualifiedJavaType apiListType = JavaGeneratorUtils
-            .getApiListJavaType(context, introspectedTable);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
 
         service.addImportedType(dtoType);
         service.addImportedType(returnType);
-        service.addImportedType(apiListType);
         service.addImportedType(objectType);
         service.addImportedType("org.springframework.beans.factory.annotation.Autowired;");
         service.addImportedType(introspectedTable.getMyBatis3JavaMapperType());
@@ -125,15 +121,10 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Interface service = new Interface(serviceType);
         service.setVisibility(JavaVisibility.PUBLIC);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable);
-        FullyQualifiedJavaType apiListType = JavaGeneratorUtils
-            .getApiListJavaType(context, introspectedTable);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
 
         service.addImportedType(dtoType);
         service.addImportedType(returnType);
-        //service.addImportedType(pageQueryType);
-        service.addImportedType(apiListType);
         service.addImportedType(objectType);
         service.addImportedType(new FullyQualifiedJavaType("java.util.List"));
 
@@ -165,8 +156,8 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
 
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
         listType.addTypeArgument(dtoType);
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, listType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
+        returnType.addTypeArgument(listType);
         method.setReturnType(returnType);
 
         JavaGeneratorUtils.methodAnnotation(method, "根据查询条件获取记录列表无分页");
@@ -191,8 +182,9 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
 
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
         listType.addTypeArgument(dtoType);
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, listType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
+        returnType.addTypeArgument(listType);
+
         method.setReturnType(returnType);
 
         JavaGeneratorUtils.methodAnnotation(method, "根据查询条件获取记录列表");
@@ -210,8 +202,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Parameter parameter = new Parameter(dtoType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         JavaGeneratorUtils.methodAnnotation(method, "删除记录");
@@ -229,8 +220,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Parameter parameter = new Parameter(dtoType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         JavaGeneratorUtils.methodAnnotation(method, "根据主键获取信息");
@@ -249,8 +239,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Parameter parameter = new Parameter(objectType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         JavaGeneratorUtils.methodAnnotation(method, "新增记录");
@@ -268,8 +257,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Parameter parameter = new Parameter(objectType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         JavaGeneratorUtils.methodAnnotation(method, "修改记录");
@@ -288,8 +276,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Parameter parameter = new Parameter(dtoType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         String queryName = JavaGeneratorUtils.firstCharLower(
@@ -331,8 +318,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Parameter parameter = new Parameter(dtoType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         String queryName = JavaGeneratorUtils.firstCharLower(
@@ -374,8 +360,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
 
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
         listType.addTypeArgument(dtoType);
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, listType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         String dtoName = dtoType.getShortName();
@@ -411,8 +396,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
 
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
         listType.addTypeArgument(dtoType);
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, listType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         String dtoName = dtoType.getShortName();
@@ -439,8 +423,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Parameter parameter = new Parameter(objectType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         String objectParamName = JavaGeneratorUtils.firstCharLower(objectName);
@@ -468,8 +451,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         Parameter parameter = new Parameter(queryType, parameterName);
         method.addParameter(parameter);
 
-        FullyQualifiedJavaType returnType = JavaGeneratorUtils
-            .getApiResultJavaType(context, introspectedTable, dtoType);
+        FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(JavaGeneratorUtils.APIRESULTDTOTYPE);
         method.setReturnType(returnType);
 
         String objectParamName = JavaGeneratorUtils.firstCharLower(objectName);
