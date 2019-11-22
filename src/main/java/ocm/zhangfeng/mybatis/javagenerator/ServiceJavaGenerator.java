@@ -123,6 +123,8 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
 
         service.addSuperInterface(serviceType);
 
+        service.addImportedType(serviceType);
+
 
         return service;
     }
