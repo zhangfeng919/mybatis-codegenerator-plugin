@@ -36,6 +36,10 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         List answer = new ArrayList();
         answer.add(serviceInterface);
 
+
+        Interface servicePlusInterface = createServicePlusInterface();
+        answer.add(servicePlusInterface);
+
         TopLevelClass serviceClass = createServiceClass();
         answer.add(serviceClass);
 
@@ -48,7 +52,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         FullyQualifiedJavaType dtoType = JavaGeneratorUtils
             .getDTOJavaType(context, introspectedTable);
         FullyQualifiedJavaType serviceInterfaceType = JavaGeneratorUtils
-            .getServiceJavaType(context, introspectedTable);
+            .getServicePlusJavaType(context, introspectedTable);
         FullyQualifiedJavaType serviceType = JavaGeneratorUtils
             .getServiceImplJavaType(context, introspectedTable);
         FullyQualifiedJavaType objectType = new FullyQualifiedJavaType(
@@ -104,6 +108,23 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         field.addAnnotation("@Autowired");
 
         service.addField(field);
+    }
+
+    Interface createServicePlusInterface() {
+
+        FullyQualifiedJavaType servicePlusType = JavaGeneratorUtils
+            .getServicePlusJavaType(context, introspectedTable);
+
+        Interface service = new Interface(servicePlusType);
+        service.setVisibility(JavaVisibility.PUBLIC);
+
+        FullyQualifiedJavaType serviceType = JavaGeneratorUtils
+            .getServiceJavaType(context, introspectedTable);
+
+        service.addSuperInterface(serviceType);
+
+
+        return service;
     }
 
     Interface createServiceInterface() {

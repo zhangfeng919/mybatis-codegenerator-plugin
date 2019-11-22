@@ -41,7 +41,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     FullyQualifiedJavaType dtoType = JavaGeneratorUtils
         .getDTOJavaType(context, introspectedTable);
     FullyQualifiedJavaType serviceInterfaceType = JavaGeneratorUtils
-        .getServiceJavaType(context, introspectedTable);
+        .getServicePlusJavaType(context, introspectedTable);
     FullyQualifiedJavaType objectType = new FullyQualifiedJavaType(
         introspectedTable.getBaseRecordType());
 
@@ -85,7 +85,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
 
   void addService(TopLevelClass api, IntrospectedTable introspectedTable) {
     FullyQualifiedJavaType serviceType = JavaGeneratorUtils
-        .getServiceJavaType(context, introspectedTable);
+        .getServicePlusJavaType(context, introspectedTable);
 
     Field field = new Field();
     field.setType(serviceType);

@@ -16,6 +16,8 @@ import org.mybatis.generator.internal.util.JavaBeansUtil;
 public class JavaGeneratorUtils {
 
     public final static String SERVICE = "Service";
+    public final static String PLUS = "Plus";
+    public final static String PLUSPACKAGE = "plus";
     public final static String API = "Api";
     public final static String SERVICEIMPL = "ServiceImpl";
     public final static String QUERY = "Query";
@@ -82,6 +84,18 @@ public class JavaGeneratorUtils {
                 append(API).toString());
 
     }
+    public static FullyQualifiedJavaType getServicePlusJavaType(Context context,
+        IntrospectedTable introspectedTable) {
+        String objectName = getObjectName(introspectedTable);
+        String pack = getServicePack(context, introspectedTable);
+        return new FullyQualifiedJavaType(
+            new StringBuffer(pack).append(".").
+                append(PLUSPACKAGE).append(".").
+                append(objectName).
+                append(SERVICE).append(PLUS).toString());
+
+    }
+
 
     public static FullyQualifiedJavaType getServiceJavaType(Context context,
         IntrospectedTable introspectedTable) {
