@@ -52,7 +52,7 @@ public class QueryJavaGenerator extends AbstractJavaGenerator {
 
         Field noField = new Field();
 
-        noField.setName("pageNO");
+        noField.setName("pageNo");
         noField.setType(FullyQualifiedJavaType.getIntInstance());
         noField.setVisibility(JavaVisibility.PRIVATE);
 

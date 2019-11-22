@@ -368,7 +368,7 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         String mapperName = JavaGeneratorUtils.firstCharLower(new FullyQualifiedJavaType(introspectedTable.getMyBatis3JavaMapperType()).getShortName());
 
         method.addBodyLine(String.format("APIResultDTO<List<%s>> resultDTO = new APIResultDTO<>();",dtoName));
-        method.addBodyLine(String.format("int pageNum = %s.getPageNO();",page.getName()));
+        method.addBodyLine(String.format("int pageNum = %s.getPageNo();",page.getName()));
         method.addBodyLine(String.format("int pageSize = %s.getPageSize();",page.getName()));
         method.addBodyLine("if(pageNum < 1 || pageSize < 1){");
         method.addBodyLine("return resultDTO.fail(\"分页参数有误！\");");
