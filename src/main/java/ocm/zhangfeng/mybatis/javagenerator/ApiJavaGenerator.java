@@ -116,7 +116,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
 
     String queryName = dtoType.getShortName();
     String serviceName = JavaGeneratorUtils.firstCharLower(
-        JavaGeneratorUtils.getServiceJavaType(context, introspectedTable)
+        JavaGeneratorUtils.getServicePlusJavaType(context, introspectedTable)
             .getShortName());
 
     method.addBodyLine(String.format("%s selectByKeyQuery = new %s();", queryName, queryName));
@@ -155,7 +155,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
 
     String queryName = dtoType.getShortName();
     String serviceName = JavaGeneratorUtils.firstCharLower(
-        JavaGeneratorUtils.getServiceJavaType(context, introspectedTable)
+        JavaGeneratorUtils.getServicePlusJavaType(context, introspectedTable)
             .getShortName());
 
     method.addBodyLine(String.format("%s sysDicTypeDeleteQuery = new %s();", queryName, queryName));
@@ -195,7 +195,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
 
     String queryName = JavaGeneratorUtils.firstCharLower(dtoType.getShortName());
     String serviceName = JavaGeneratorUtils.firstCharLower(
-        JavaGeneratorUtils.getServiceJavaType(context, introspectedTable).getShortName());
+        JavaGeneratorUtils.getServicePlusJavaType(context, introspectedTable).getShortName());
 
     method.addBodyLine(String
         .format("return %s.selectByParam(%s,%s);", serviceName, queryName, pageParam.getName()));
@@ -222,7 +222,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     method.setReturnType(returnType);
 
     String serviceName = JavaGeneratorUtils.firstCharLower(
-        JavaGeneratorUtils.getServiceJavaType(context, introspectedTable).getShortName());
+        JavaGeneratorUtils.getServicePlusJavaType(context, introspectedTable).getShortName());
 
     method.addBodyLine(
         String.format("return %s.%s(%s);", serviceName, method.getName(), objectParamName));
@@ -248,7 +248,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     method.setReturnType(returnType);
 
     String serviceName = JavaGeneratorUtils.firstCharLower(
-        JavaGeneratorUtils.getServiceJavaType(context, introspectedTable).getShortName());
+        JavaGeneratorUtils.getServicePlusJavaType(context, introspectedTable).getShortName());
     method.addBodyLine(
         String.format("return %s.%s(%s);", serviceName, method.getName(), objectParamName));
 
