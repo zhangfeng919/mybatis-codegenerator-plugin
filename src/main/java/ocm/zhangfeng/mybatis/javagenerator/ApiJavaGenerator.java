@@ -63,6 +63,7 @@ public class ApiJavaGenerator extends AbstractJavaGenerator {
     api.addImportedType("org.springframework.web.bind.annotation.PostMapping");
     api.addImportedType("org.springframework.web.bind.annotation.PathVariable");
     api.addImportedType("org.springframework.web.bind.annotation.GetMapping");
+    api.addImportedType("java.util.List");
 
     api.addAnnotation("@RestController");
     api.addAnnotation(
