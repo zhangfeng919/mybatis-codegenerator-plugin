@@ -74,10 +74,12 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
         service.addImportedType("com.github.pagehelper.PageInfo");
         service.addImportedType("java.util.stream.Collectors");
         service.addImportedType("org.springframework.stereotype.Service");
+        service.addImportedType("org.springframework.transaction.annotation.Transactional");
         service.addImportedType("java.util.List");
 
         service.addSuperInterface(serviceInterfaceType);
         service.addAnnotation("@Service");
+        service.addAnnotation("@Transactional");
 
         addMapper(service, introspectedTable);
 
